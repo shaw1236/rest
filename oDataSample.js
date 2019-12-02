@@ -9,8 +9,10 @@
 const request = require('request');
 
 class oDataSample {
-    constructor(url = 'https://services.odata.org/TripPinRESTierService/People') {  // dummy
-        this.url = url;
+    constructor(key = '(S(i4oopvr0nc4j1ta5ytvp5gtz))', 
+                url = 'https://services.odata.org/TripPinRESTierService', 
+                EntitySet = 'People') {  
+        this.url = `${url}/${key}/${EntitySet}`;
     }
     
     static printPerson(value) {
@@ -27,6 +29,25 @@ class oDataSample {
             console.log("Address: " + address);
         }      
         console.log("--------------------------------------------------------------");  
+    }
+
+    static output(response) {
+        if (response.statusCode == 200 || 
+            response.statusCode == 201) {
+            let obj = {};
+            if (typeof response.body == 'object')
+                obj = response.body;
+            else
+                obj = JSON.parse(response.body);
+    
+            // console.log(obj);
+            if (obj.hasOwnProperty("value")) {
+                const people = obj["value"];   
+                people.forEach(elem => oDataSample.printPerson(elem));
+            }
+            else 
+                oDataSample.printPerson(obj);
+        }
     }
 
     static mylog(response) {
@@ -69,7 +90,7 @@ class oDataSample {
             ],
             "AddressInfo": [
                 {
-                    "Address": "187 Suffolk Ln.",
+                    "Address": "1000 Suffolk Ln.",
                     "City": {
                         "Name": "Boise",
                         "CountryRegion": "United States",
@@ -103,15 +124,15 @@ class oDataSample {
         console.log(url);
     
         const body = {
-            "UserName":"russellwhyte",
-            "FirstName":"Russell",
-            "LastName":"Whyte",
+            "UserName":"simon",
+            "FirstName":"Simon",
+            "LastName":"Simon",
             "Emails":[
-                "testtest@example.com"
+                "testtest2@example.com"
             ],
             "AddressInfo": [
                 {
-                    "Address": "187 Suffolk Ln.",
+                    "Address": "2000 Suffolk Ln.",
                     "City": {
                         "Name": "Boise",
                         "CountryRegion": "United States",
@@ -143,11 +164,11 @@ class oDataSample {
         console.log("Test PATCH");
 
         const url = `${this.url}('${person}')`;
-        console.log(url);
+        //console.log(url);
 
         const body = {
             "Emails":[
-                "testtest@yahoo.com"
+                "testtest@gmail.com"
             ]
         }
 
@@ -172,7 +193,7 @@ class oDataSample {
     delete(person = 'russellwhyte', callback) {
         console.log("Test DELETE");
         const url = `${this.url}('${person}')`;
-        console.log(url);
+        //console.log(url);
 
         request({
                 url: url,
@@ -193,24 +214,12 @@ class oDataSample {
 
 odata = new oDataSample();
 
-const person = 'jameslee';
-console.log(`${odata.url}('${person}')`);
+odata.get(null, response => oDataSample.output(response));     
+//odata.get('russellwhyte', response => oDataSample.output(response));    
+//odata.get('simon', response => oDataSample.output(response));
 
-odata.get(null, response => {    
-//odata.Query('russellwhyte', (response, body) => {    
-    if (response.statusCode == 200) {
-        const obj = JSON.parse(response.body);
-            // console.log(obj);
-            if (obj.hasOwnProperty("value")) {
-            const people = obj["value"];   
-            people.forEach(elem => oDataSample.printPerson(elem));
-        }
-        else 
-            oDataSample.printPerson(obj);
-    }
-});
+//odata.post(response => oDataSample.output(response));
 
-//odata.post(response => oDataSample.mylog(response, body));
-//odata.put('russellwhyte', response => oDataSample.mylog(response, body));
-//odata.patch('russellwhyte', response => oDataSample.mylog(response, body));
-//odata.delete('russellwhyte', response => oDataSample.mylog(response, body));
+//odata.put('simon', response => oDataSample.output(response));
+//odata.patch('russellwhyte', response => oDataSample.output(response));
+//odata.delete('simon', response => oDataSample.output(response));
