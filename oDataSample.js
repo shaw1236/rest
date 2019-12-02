@@ -5,10 +5,12 @@
 //
 // Author : Simon Li  Nov 2019
 //
+// https://help.sap.com/saphelp_mii150sp04/helpdata/EN/54/5aff512ec09b33e10000000a44538d/content.htm?no_cache=true
 const request = require('request');
 
 class oDataSample {
-    constructor() {  // dummy
+    constructor(url = 'https://services.odata.org/TripPinRESTierService/People') {  // dummy
+        this.url = url;
     }
     
     static printPerson(value) {
@@ -27,15 +29,20 @@ class oDataSample {
         console.log("--------------------------------------------------------------");  
     }
 
+    static mylog(response) {
+        console.log("**** Response ****");
+        console.log(response);
+    }
+    
     // Read - GET
-    Query(person = 'russellwhyte', callback) {
+    get(person = 'russellwhyte', callback) {
         console.log("Test GET");
     
-        const url  = !person? 'https://services.odata.org/TripPinRESTierService/People' :
-                              `https://services.odata.org/TripPinRESTierService/People('${person}')`;
+        const url  = !person? this.url : `${this.url}('${person}')`;
 
         request({
-            url: `${url}?$format=json`,
+            //url: `${url}?$format=json`,
+            url: url,
             method: 'GET',
             headers:{
                 //"Authorization": "Basic <<base64 encoded username:pass>>"",
@@ -45,15 +52,14 @@ class oDataSample {
             if (err) throw err;
     
             if (typeof callback != 'undefined')
-                callback(response, body);
+                callback(response);
         })   
     }
 
     // Create - POST
-    Post(callback) {
+    post(callback) {
         console.log("Test POST");
     
-        const url = "https://services.odata.org/TripPinRESTierService/People";
         const body = {
             "UserName":"simon",
             "FirstName":"Simon",
@@ -74,7 +80,7 @@ class oDataSample {
         }
 
         request({
-            url: url,
+            url: this.url,
             method: 'POST',
             headers:{
                 //"Authorization": "Basic <<base64 encoded username:pass>>"",
@@ -86,14 +92,14 @@ class oDataSample {
             console.log("Status: " + response.statusCode);
             //console.log(response);  
             if (typeof callback != 'undefined')
-                callback(response, body);   
+                callback(response);   
         })      
     }
 
     // Update/replace - PUT
-    Put(person = 'russellwhyte', callback) {
+    put(person = 'russellwhyte', callback) {
         console.log("Test PUT");
-        const url = `https://services.odata.org/TripPinRESTierService/People('${person}')`;
+        const url = `${this.url}('${person}')`;
         console.log(url);
     
         const body = {
@@ -128,15 +134,15 @@ class oDataSample {
             console.log("Status: " + response.statusCode);
             //console.log(response);  
             if (typeof callback != 'undefined')
-                callback(response, body);   
+                callback(response);   
         })
     }
 
     // Update/portion - PATCH
-    Patch(person = 'russellwhyte', callback) {
+    patch(person = 'russellwhyte', callback) {
         console.log("Test PATCH");
 
-        const url = `https://services.odata.org/TripPinRESTierService/People('${person}')`;
+        const url = `${this.url}('${person}')`;
         console.log(url);
 
         const body = {
@@ -158,14 +164,14 @@ class oDataSample {
             console.log("Status: " + response.statusCode);
             //console.log(response);  
             if (typeof callback != 'undefined')
-                callback(response, body);
+                callback(response);
         })
     }
 
     // Delete - DELETE
-    Delete(person = 'russellwhyte', callback) {
+    delete(person = 'russellwhyte', callback) {
         console.log("Test DELETE");
-        const url = `https://services.odata.org/TripPinRESTierService/People('${person}')`;
+        const url = `${this.url}('${person}')`;
         console.log(url);
 
         request({
@@ -180,17 +186,20 @@ class oDataSample {
             console.log("Status: " + response.statusCode);
             //console.log(response);  
             if (typeof callback != 'undefined')
-                callback(response, body);
+                callback(response);
         })
     }
 }
 
-test = new oDataSample();
+odata = new oDataSample();
 
-test.Query(null, (response, body) => {    
-//test.Query('russellwhyte', (response, body) => {    
-        if (response.statusCode == 200) {
-            const obj = JSON.parse(body);
+const person = 'jameslee';
+console.log(`${odata.url}('${person}')`);
+
+odata.get(null, response => {    
+//odata.Query('russellwhyte', (response, body) => {    
+    if (response.statusCode == 200) {
+        const obj = JSON.parse(response.body);
             // console.log(obj);
             if (obj.hasOwnProperty("value")) {
             const people = obj["value"];   
@@ -201,7 +210,7 @@ test.Query(null, (response, body) => {
     }
 });
 
-//test.Post();
-//test.Put();
-//test.Patch();
-//test.Delete();
+//odata.post(response => oDataSample.mylog(response, body));
+//odata.put('russellwhyte', response => oDataSample.mylog(response, body));
+//odata.patch('russellwhyte', response => oDataSample.mylog(response, body));
+//odata.delete('russellwhyte', response => oDataSample.mylog(response, body));

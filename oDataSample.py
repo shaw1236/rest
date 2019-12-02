@@ -8,8 +8,8 @@
 import requests
 
 class oDataSample:
-    def __init__(self):
-        pass
+    def __init__(self, url = 'https://services.odata.org/TripPinRESTierService/People'):
+        self.url = url
 
     @staticmethod
     def printPerson(value):
@@ -27,14 +27,14 @@ class oDataSample:
         print("--------------------------------------------------------------")  
 
     # Read - GET
-    def Query(self, person = "russellwhyte"):
+    def get(self, person = "russellwhyte"):
         print("Test GET")
     
         #url  = 'https://services.odata.org/TripPinRESTierService/People?$format=json'
         if person.upper() == "ALL":
-            url = 'https://services.odata.org/TripPinRESTierService/People'
+            url = self.url
         else:
-            url =  "https://services.odata.org/TripPinRESTierService/People('%s')" % (person)
+            url =  "%s('%s')" % (self.url, person)
 
         # Get the response - <Response [200]>
         response = requests.get(url)
@@ -51,10 +51,9 @@ class oDataSample:
             oDataSample.printPerson(json)
 
     # Create - POST
-    def Post(self):
+    def post(self):
         print("Test POST")
 
-        url = 'https://services.odata.org/TripPinRESTierService/People'
         body = {
             "UserName":"simon",
             "FirstName":"Simon",
@@ -74,17 +73,19 @@ class oDataSample:
             ]
         }
 
-        response = requests.post(url, json = body)
-        print(response)
+        response = requests.post(self.url, json = body)
+        #print(response)
+        print("status: %d" % response.status_code)
+
         # Get the 
-        json = response.json()
-        print(json)
+        #json = response.json()
+        #print(json)
 
     # Update/replace - PUT
-    def Put(self, person = 'russellwhyte'):
+    def put(self, person = 'russellwhyte'):
         print("Test PUT")
     
-        url = "https://services.odata.org/TripPinRESTierService/People('%s')" % person
+        url = "%s('%s')" % (self.url, person)
     
         body = {
             "UserName":"russellwhyte",
@@ -108,42 +109,50 @@ class oDataSample:
         }
 
         response = requests.put(url, json = body)
-        print(response)
+        #print(response)
+        print("status: %d" % response.status_code)
         # Get the 
-        json = response.json()
-        print(json)
+        #json = response.json()
+        #print(json)
 
     # Update/portion - PATCH
-    def Patch(self, person = 'russellwhyte'):  
+    def patch(self, person = 'russellwhyte'):  
         print("Test PATCH")
       
-        url = "https://services.odata.org/TripPinRESTierService/People('%s')" % person
+        url = "%s('%s')" % (self.url, person)
         #print(url)
         body = {
             "FirstName": "Mirs",
             "LastName": "King"
         }
         response = requests.patch(url, json = body)
-        print(response)
+        #print(response)
+        print("status: %d" % response.status_code)
         # Get the 
-        json = response.json()
-        print(json)
+        #json = response.json()
+        #print(json)
 
     # Delete - DELETE
-    def Delete(self, person = 'russellwhyte'):    
+    def delete(self, person = 'russellwhyte'):    
         print("Test DELETE")
     
-        url = "https://services.odata.org/TripPinRESTierService/People('%s')" % person
+        url = "%s('%s')" % (self.url, person)
         #print(url)
         response = requests.delete(url)
-        print(response)
+        #print(response)
+        print("status: %d" % response.status_code)
         # Get the 
-        json = response.json()
-        print(json)
+        #json = response.json()
+        #print(json)
 
-test = oDataSample()
-test.Query("ALL")       
-#test.Post()
-#test.Put()
-#test.Patch()
-#test.Delete()
+odata = oDataSample()
+
+odata.get("ALL")       
+#odata.get()       
+
+#url = "%s('%s')" % (odata.url, 'peter'); print(url)
+
+#odata.post()
+#odata.put()
+#odata.patch()
+#odata.delete()
