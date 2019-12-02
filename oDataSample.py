@@ -1,3 +1,10 @@
+## Python sample restful api service(CRUD) to consume an OData
+## https://services.odata.org/TripPinRESTierService/People
+##
+## Purpose: provide restful api to consume an OData service 
+##
+## Author : Simon Li  Nov 2019
+##
 import requests
 
 class oDataSample:
@@ -19,6 +26,7 @@ class oDataSample:
             print("Address: " + address)  
         print("--------------------------------------------------------------")  
 
+    # Read - GET
     def Query(self, person = "russellwhyte"):
         print("Test GET")
     
@@ -42,6 +50,7 @@ class oDataSample:
         else:
             oDataSample.printPerson(json)
 
+    # Create - POST
     def Post(self):
         print("Test POST")
 
@@ -71,6 +80,7 @@ class oDataSample:
         json = response.json()
         print(json)
 
+    # Update/replace - PUT
     def Put(self, person = 'russellwhyte'):
         print("Test PUT")
     
@@ -103,6 +113,7 @@ class oDataSample:
         json = response.json()
         print(json)
 
+    # Update/portion - PATCH
     def Patch(self, person = 'russellwhyte'):  
         print("Test PATCH")
       
@@ -118,6 +129,7 @@ class oDataSample:
         json = response.json()
         print(json)
 
+    # Delete - DELETE
     def Delete(self, person = 'russellwhyte'):    
         print("Test DELETE")
     

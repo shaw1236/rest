@@ -1,8 +1,14 @@
+// Node sample restful api service(CRUD) to consume an OData
+// https://services.odata.org/TripPinRESTierService/People
+//
+// Purpose: provide restful api to consume an OData service 
+//
+// Author : Simon Li  Nov 2019
+//
 const request = require('request');
 
 class oDataSample {
-    constructor() {
-
+    constructor() {  // dummy
     }
     
     static printPerson(value) {
@@ -21,6 +27,7 @@ class oDataSample {
         console.log("--------------------------------------------------------------");  
     }
 
+    // Read - GET
     Query(person = 'russellwhyte', callback) {
         console.log("Test GET");
     
@@ -42,6 +49,7 @@ class oDataSample {
         })   
     }
 
+    // Create - POST
     Post(callback) {
         console.log("Test POST");
     
@@ -82,6 +90,7 @@ class oDataSample {
         })      
     }
 
+    // Update/replace - PUT
     Put(person = 'russellwhyte', callback) {
         console.log("Test PUT");
         const url = `https://services.odata.org/TripPinRESTierService/People('${person}')`;
@@ -123,6 +132,7 @@ class oDataSample {
         })
     }
 
+    // Update/portion - PATCH
     Patch(person = 'russellwhyte', callback) {
         console.log("Test PATCH");
 
@@ -152,6 +162,7 @@ class oDataSample {
         })
     }
 
+    // Delete - DELETE
     Delete(person = 'russellwhyte', callback) {
         console.log("Test DELETE");
         const url = `https://services.odata.org/TripPinRESTierService/People('${person}')`;

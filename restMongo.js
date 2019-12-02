@@ -1,3 +1,9 @@
+// Node/MongoDb Service for tasks 
+//
+// Purpose: provide restful web api for tasks 
+//
+// Author : Simon Li  Nov 2019
+//
 'use strict';
 
 const express = require('express');

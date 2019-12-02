@@ -1,3 +1,10 @@
+## Python/flask/MySQL Service for tasks 
+##
+##  Purpose: provide restful web api for tasks 
+##
+##  Author : Simon Li  Nov 2019
+##
+
 # https://code.visualstudio.com/Docs/editor/debugging
 ###############################################################
 # Use package flask   (pip install flask)

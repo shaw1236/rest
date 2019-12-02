@@ -1,3 +1,9 @@
+## MySQL Database Service 
+##
+## Purpose: provide the database service 
+##
+## Author : Simon Li  Oct 2019
+##
 import mysql.connector
 import json
 

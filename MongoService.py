@@ -1,3 +1,9 @@
+## MongoDB API service 
+##
+## Purpose: provide the api service 
+##
+## Author : Simon Li  Oct 2019
+##
 import pymongo
 
 class MongoService:
